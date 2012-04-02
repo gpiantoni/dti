@@ -6,8 +6,8 @@ function dti_convert(cfg, subj)
 % be completely robust.
 %
 % You should check that the b0 volume in the DTI file and in the gradient
-% files refers to the same volume number (output given follows the Matlab
-% convertion starting at 1).
+% files refers to the same volume number (output given follows the FSL
+% convertion starting at 0).
 %
 % CFG
 %  .rec: name of the recording
@@ -38,7 +38,7 @@ function dti_convert(cfg, subj)
 %  - PROJNAME_SUBJ_smri_phase.nii.gz: phase information of fieldmaps (optional)
 % 
 % Part of DTI
-% see also DTI_CONVERT, DTI_PROCESS
+% see also DTI_CONVERT, DTI_PREPR, DTI_FA, DTI_BEDPOSTX
 
 %---------------------------%
 %-start log
@@ -146,8 +146,8 @@ if exist([ddir parfile], 'file')
   fwrite(fbid, sprintf('%1.f ', bvals));
   fclose(fbid);
   
-  outtmp = sprintf('In %s.bval (1-%d), b0 volume is number: %d\n', ...
-    dtiname, numel(bvals), find(bvals == 0));
+  outtmp = sprintf('In %s.bval (0-%d), b0 volume is number: %d\n', ...
+    dtiname, numel(bvals)-1, find(bvals == 0)-1);
   output = [output outtmp];
   %---------------------------%
   
@@ -166,8 +166,8 @@ if exist([ddir parfile], 'file')
   fwrite(fbid, sprintf('%1.4f\t', bvecz));
   fclose(fbid);
   
-  outtmp = sprintf('In %s_orig.bvec (1-%d), b0 volume is number: %d\n', ... 
-    dtiname, numel(bvecx), find(sum(abs([bvecx bvecy bvecz]), 2) == 0));
+  outtmp = sprintf('In %s_orig.bvec (0-%d), b0 volume is number: %d\n', ... 
+    dtiname, numel(bvecx)-1, find(sum(abs([bvecx bvecy bvecz]), 2) == 0)-1);
   output = [output outtmp];
   %---------------------------%
   
@@ -187,8 +187,8 @@ grad = grad([3 1 2],:);
 dlmwrite([ddir dtiname '_orig.grad'], grad, 'delimiter', '\t')
 delete([ddir dtiname '.grad'])
 
-outtmp = sprintf('In %s_orig.grad (1-%d), b0 volume is number: %d\n', ... 
-  dtiname, size(grad,2), find(sum(abs([bvecx bvecy bvecz]), 2) == 0));
+outtmp = sprintf('In %s_orig.grad (0-%d), b0 volume is number: %d\n', ... 
+  dtiname, size(grad,2)-1, find(sum(abs([bvecx bvecy bvecz]), 2) == 0)-1);
 output = [output outtmp];
 %-----------------%
 %---------------------------%
@@ -206,8 +206,8 @@ act(iB0) = [];
 [noB0] = max(act);
 %-------%
 
-outtmp = sprintf('In %s.nii.gz (1-%d), b0 volume is likely number: %d (value: % 4.f, second best: % 4.f)\n', ...
-  dtiname, nact, iB0, B0, noB0);
+outtmp = sprintf('In %s.nii.gz (0-%d), b0 volume is likely number: %d (value: % 4.f, second best: % 4.f)\n', ...
+  dtiname, nact-1, iB0-1, B0, noB0);
 output = [output outtmp];
 %---------------------------%
 %-------------------------------------%
