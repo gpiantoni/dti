@@ -13,7 +13,7 @@ function dti_bedpostx(cfg, subj)
 %  (if you did eddy current, it's '_ec'. It can be '').
 %
 %  .dti.ref: template for flirt realignment ('/usr/share/data/fsl-mni152-templates/MNI152_T1_1mm_brain.nii.gz')
-%
+%            if empty, no registration
 % INPUT
 %  Should be in CFG.DATA/0001/CFG.DTI.MOD/CFG.DTI.COND/ and contain:
 %  - PROJNAME_SUBJ_smri_dti(CFG.DTIPREP).nii.gz: DWI images, eventually after preprocessing
@@ -111,9 +111,11 @@ disp('done')
 
 %---------------------------%
 %-registration to standard space
-system(['flirt -in ' ddir ngfile ' -ref ' cfg.dti.ref ...
-   ' -omat ' bedpostxdir 'xfms/diff2standard.mat -searchrx -90 90 -searchry -90 90 -searchrz -90 90 -dof 12 -cost corratio']);
-system(['convert_xfm -omat ' bedpostxdir 'xfms/standard2diff.mat -inverse ' bedpostxdir 'xfms/diff2standard.mat']);
+if ~isempty(cfg.dti.ref)
+  system(['flirt -in ' ddir ngfile ' -ref ' cfg.dti.ref ...
+    ' -omat ' bedpostxdir 'xfms/diff2standard.mat -searchrx -90 90 -searchry -90 90 -searchrz -90 90 -dof 12 -cost corratio']);
+  system(['convert_xfm -omat ' bedpostxdir 'xfms/standard2diff.mat -inverse ' bedpostxdir 'xfms/diff2standard.mat']);
+end
 %---------------------------%
 
 %---------------------------%
