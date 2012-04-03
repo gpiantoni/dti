@@ -21,7 +21,9 @@ function dti_convert(cfg, subj)
 %  This function expects PAR/REC/GRAD in CFG.RECS/0001/CFG.DTI.MOD/raw/
 %  It converts the data and copies them into CFG.DATA/0001/CFG.DTI.MOD/CFG.DTI.COND/
 %  Furthermore, if it contains fieldmaps, it converts them to NIFTI too.
-% 
+%  This function is so far specific to the SVUI dataset, especially in
+%  handling the gradient. I don't think this is very robust or common.
+%
 %  If your data is already NIFTI, then do not use this function but copy
 %  your data into CFG.DATA/0001/CFG.DTI.MOD/CFG.DTI.COND/
 %  

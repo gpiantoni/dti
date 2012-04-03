@@ -56,7 +56,7 @@ system(['bet ' ddir ngfile ' ' ddir ngfile ' -m -f .3']); % change -f, (no -n be
 
 %-----------------%
 %-eddy current correction
-% system(['eddy_correct ' ddir dfile ' ' ddir ecfile ' ' num2str(cfg.dti.b0)]);
+system(['eddy_correct ' ddir dfile ' ' ddir ecfile ' ' num2str(cfg.dti.b0)]);
 %-----------------%
 %---------------------------%
 
