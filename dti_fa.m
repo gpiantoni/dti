@@ -1,5 +1,5 @@
 function dti_fa(cfg, subj)
-%DTI_PROCESS eddy current and fieldmap (to implement)
+%DTI_FA calculate FA and friends
 %
 % CFG
 %  .rec: name of the recording

@@ -33,7 +33,7 @@ tic_t = tic;
 
 %---------------------------%
 %-dir and files
-ddir = sprintf('%s1%03.f/%s/%s/', cfg.data, subj, cfg.dti.mod, cfg.dti.cond); % data directory
+ddir = sprintf('%s1%03.f/%s/%s/', cfg.data, subj, cfg.dti.mod, cfg.dti.cond); % data directory % XXX remember to change
 
 dfile = sprintf('%s_%04.f_%s_%s', cfg.rec, subj, cfg.dti.mod, cfg.dti.cond); % data
 ngfile = [dfile '_ng']; % Not-gradient
