@@ -153,7 +153,7 @@ if exist([ddir parfile], 'file')
   
   %---------------------------%
   %-bvec
-  bvecy = PAR.slice_index(slidx, 46);
+  bvecy = -PAR.slice_index(slidx, 46);
   bvecz = PAR.slice_index(slidx, 47);
   bvecx = PAR.slice_index(slidx, 48);
   bvecfile = [ddir dtiname '_orig.bvec'];
