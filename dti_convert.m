@@ -40,7 +40,8 @@ function dti_convert(cfg, subj)
 %  - PROJNAME_SUBJ_smri_phase.nii.gz: phase information of fieldmaps (optional)
 % 
 % Part of DTI
-% see also DTI_CONVERT, DTI_PREPR, DTI_FA, DTI_BEDPOSTX
+% see also DTI_CONVERT, DTI_PREPROC, DTI_FA, DTI_BEDPOSTX
+%          DTI_TBSS, DTI_DESIGN, DTI_RAND
 
 %---------------------------%
 %-start log
@@ -52,7 +53,7 @@ tic_t = tic;
 %-------------------------------------%
 %-dir and files
 rdir = sprintf('%s%04.f/%s/%s/', cfg.recs, subj, cfg.dti.mod, 'raw'); % recordings
-ddir = sprintf('%s1%03.f/%s/%s/', cfg.data, subj, cfg.dti.mod, cfg.dti.cond); % data % XXX remember to change
+ddir = sprintf('%s%04.f/%s/%s/', cfg.data, subj, cfg.dti.mod, cfg.dti.cond); % data
 if isdir(ddir); rmdir(ddir, 's'); end
 mkdir(ddir)
 ext = '.nii.gz';

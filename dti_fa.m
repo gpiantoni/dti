@@ -28,6 +28,7 @@ function dti_fa(cfg, subj)
 %
 % Part of DTI
 % see also DTI_CONVERT, DTI_PREPROC, DTI_FA, DTI_BEDPOSTX
+%          DTI_TBSS, DTI_DESIGN, DTI_RAND
 
 %---------------------------%
 %-start log
@@ -38,7 +39,7 @@ tic_t = tic;
 
 %---------------------------%
 %-dir and files
-ddir = sprintf('%s1%03.f/%s/%s/', cfg.data, subj, cfg.dti.mod, cfg.dti.cond); % data directory % XXX remember to change
+ddir = sprintf('%s%04.f/%s/%s/', cfg.data, subj, cfg.dti.mod, cfg.dti.cond); % data directory
 fadir = [ddir 'fa/']; % FA directory
 if isdir(fadir); rmdir(fadir, 's'); end
 mkdir(fadir)
