@@ -3,25 +3,26 @@ function dti_design(cfg)
 %
 % CFG
 %  .dtifa.tbss: directory name for all FA etc files
-% 
+%
 %  .tbss.des: one or more structures, with fields:
 %         .name: name of the contrast
 %         .fun: name of the function (see below)
 %         .corr: 1 (for positive correlation) or -1 for negative
-%                correlation (one value per column of the design matrix) 
+%                correlation (one value per column of the design matrix)
 %         .demean: if your design columns should be demeaned (logical, default is TRUE)
 %         .ones: if it adds a column of ones to your design matrix (logical, default is TRUE)
 %  The function gets as input the cfg and the index of cfg.tbss.des in the
 %  loop. It should return a design matrix. The size of the design matrix is
-%  NxC, where N is the number of subjects and C is the number of regressors/contrasts.   
+%  NxC, where N is the number of subjects and C is the number of regressors/contrasts.
 %  For example, you can return a random design matrix with two regressors:
-%      function [des] = des_random(cfg, d)
+%      function [des, output] = des_random(cfg, d)
 %      des = randn(numel(cfg.subjall), 2);
 %  It's very important that N is equal to numel(cfg.subjall). If you don't
-%  analyze some subjects, you should be careful to do: 
+%  analyze some subjects, you should be careful to do:
 %    for i = 1:numel(cfg.subjall)
 %      des(i, 1) = single subject value
 %    end
+%  The output 'output' is optional, and will be written to the log file
 %
 % INPUT
 %  Depend on your own function
@@ -64,17 +65,21 @@ for d = 1:numel(cfg.tbss.des)
   output = [output sprintf('\nContrast: %s\n', cfg.tbss.des(d).name)];
   
   if ~isfield(cfg.tbss.des(d), 'demean') || isempty(cfg.tbss.des(d).demean)
-    cfg.tbss.des(d).demean = true; 
+    cfg.tbss.des(d).demean = true;
   end
   if ~isfield(cfg.tbss.des(d), 'ones') || isempty(cfg.tbss.des(d).ones)
-    cfg.tbss.des(d).ones = true; 
+    cfg.tbss.des(d).ones = true;
   end
   %---------------------------%
   
   %---------------------------%
   %-run specific function to prepare design
-  des = feval(cfg.tbss.des(d).fun, cfg, d);
-  
+  if nargout(cfg.tbss.des(d).fun) == 1
+    des = feval(cfg.tbss.des(d).fun, cfg, d);
+  else
+    [des outtmp] = feval(cfg.tbss.des(d).fun, cfg, d);
+    output = [output outtmp];
+  end
   %-----------------%
   %-check input and return values
   if size(des,2) ~= numel(cfg.tbss.des(d).corr)
@@ -101,9 +106,11 @@ for d = 1:numel(cfg.tbss.des)
   %-----------------%
   %-show correlation between columns
   des_corr = corrcoef(des);
-  output = [output sprintf('Correlation between regressors\n')];
-  for i = 1:size(des_corr,1)
-    output = [output sprintf('%6.2f', des_corr(i,:)) sprintf('\n')];
+  if size(des,2) > 1
+    output = [output sprintf('Correlation between regressors\n')];
+    for i = 1:size(des_corr,1)
+      output = [output sprintf('%6.2f', des_corr(i,:)) sprintf('\n')];
+    end
   end
   %-----------------%
   
