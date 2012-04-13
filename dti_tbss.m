@@ -7,7 +7,7 @@ function dti_tbss(cfg)
 %  .dti.mod: 'smri' (modality of DTI)
 %  .dti.cond: 'dti' (condition of DTI)
 %
-%  .dtifa.tbss: directory name for all FA etc files (if empty, it does not copy)
+%  .dtifa.tbss: directory name for all FA etc files
 %  .dtifa.type: type of images to copy to common directory (a cell, as {'FA' 'L1' 'RD'})
 % 
 %  .tbss.thr: threshold for including FA tracts (default 0.2)
