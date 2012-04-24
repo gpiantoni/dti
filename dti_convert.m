@@ -61,8 +61,8 @@ ext = '.nii.gz';
 
 %-------------------------------------%
 %-copy the data into
-system(['ln ' rdir cfg.rec '*' cfg.dti.cond '* ' ddir]);
-system(['ln ' rdir cfg.rec '*' cfg.dti.fieldmap '* ' ddir]);
+bash(['ln ' rdir cfg.rec '*' cfg.dti.cond '* ' ddir]);
+bash(['ln ' rdir cfg.rec '*' cfg.dti.fieldmap '* ' ddir]);
 %-------------------------------------%
 
 %-------------------------------------%
@@ -80,7 +80,7 @@ end
 %-then use dcm2nii to convert from PAR/REC into nifti
 % in preferences, check that it returns "input filename" and output should
 % be compressed fsl
-system(['dcm2nii -o ' ddir ' -d N -g N -e Y ' ddir '*.PAR']); % don't zip
+bash(['dcm2nii -o ' ddir ' -d N -g N -e Y ' ddir '*.PAR']); % don't zip
 %-----------------%
 
 %---------------------------%
@@ -106,7 +106,7 @@ for d = 1:numel(alldti)
   %-----------------%
   %-unzip, rename, zip
   % gunzip([rdir alldti(d).name])
-  system(['mv ' ddir alldti(d).name ' ' newname ext(1:4)]);
+  bash(['mv ' ddir alldti(d).name ' ' newname ext(1:4)]);
   gzip([newname ext(1:4)])
   delete([newname ext(1:4)])
   %-----------------%
@@ -198,7 +198,7 @@ output = [output outtmp];
 
 %---------------------------%
 %-check whether b0 is the first or the last one
-[~, act] = system(['fslmeants -i ' ddir dtiname ' -c 57 69 30']);
+[act] = bash(['fslmeants -i ' ddir dtiname ' -c 57 69 30']);
 act = str2num(act);
 [B0, iB0] = max(act);
 nact = numel(act);

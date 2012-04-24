@@ -56,19 +56,19 @@ bval   = [file '.bval'];
 
 %---------------------------%
 %-move good files to bedpostx directory
-system(['ln ' ddir dfile '.nii.gz ' beddir 'data.nii.gz']);
-system(['ln ' ddir file '_ng_mask.nii.gz ' beddir 'nodif_brain_mask.nii.gz']);
-system(['ln ' ddir bvec ' ' beddir 'bvecs']);
-system(['ln ' ddir bval ' ' beddir 'bvals']);
+bash(['ln ' ddir dfile '.nii.gz ' beddir 'data.nii.gz']);
+bash(['ln ' ddir file '_ng_mask.nii.gz ' beddir 'nodif_brain_mask.nii.gz']);
+bash(['ln ' ddir bvec ' ' beddir 'bvecs']);
+bash(['ln ' ddir bval ' ' beddir 'bvals']);
 %---------------------------%
 
 %---------------------------%
 %-bedpostx
-system(['bedpostx ' beddir]);
+bash(['bedpostx ' beddir]);
 
 %-----------------%
 %-check whether the program has finished
-[~, nslices] = system(['cat ' bedpostxdir 'commands.txt | wc -l']);
+[~, nslices] = bash(['cat ' bedpostxdir 'commands.txt | wc -l']);
 nslices = eval(nslices);
 
 while 1
@@ -76,7 +76,7 @@ while 1
   
   %-------%
   %-number of slices which are done
-  [~, done] = system(['ls ' bedpostxdir 'diff_slices/data_slice_00*/dyads1.nii.gz -l | wc -l']);
+  [~, done] = bash(['ls ' bedpostxdir 'diff_slices/data_slice_00*/dyads1.nii.gz -l | wc -l']);
   if numel(done) > 100 % something like: 'ls: cannot access etc'
     done = 0;
   else
@@ -86,9 +86,9 @@ while 1
   
   %-------%
   %-check if it's running
-  [~, run_ss] = system('ps -u gpiantoni | grep -c xfibres');
+  [run_ss] = bash('ps -u gpiantoni | grep -c xfibres');
   run_ss = eval(run_ss);
-  [~, run_nin111] = system('ssh nin111 ps -u gpiantoni | grep -c xfibres');
+  [run_nin111] = bash('ssh nin111 ps -u gpiantoni | grep -c xfibres');
   run_nin111 = eval(run_nin111);
   
   fprintf('%s % 3d/% 3d (running% 3d on somerenserver,% 3d on nin111)\n', datestr(now, 'HH:MM:SS'), done, nslices, run_ss, run_nin111);
@@ -113,9 +113,9 @@ disp('done')
 %---------------------------%
 %-registration to standard space
 if ~isempty(cfg.dti.ref)
-  system(['flirt -in ' ddir ngfile ' -ref ' cfg.dti.ref ...
+  bash(['flirt -in ' ddir ngfile ' -ref ' cfg.dti.ref ...
     ' -omat ' bedpostxdir 'xfms/diff2standard.mat -searchrx -90 90 -searchry -90 90 -searchrz -90 90 -dof 12 -cost corratio']);
-  system(['convert_xfm -omat ' bedpostxdir 'xfms/standard2diff.mat -inverse ' bedpostxdir 'xfms/diff2standard.mat']);
+  bash(['convert_xfm -omat ' bedpostxdir 'xfms/standard2diff.mat -inverse ' bedpostxdir 'xfms/diff2standard.mat']);
 end
 %---------------------------%
 

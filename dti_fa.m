@@ -56,14 +56,14 @@ bval   = [file '.bval'];
 %-calculate FA
 %-------%
 %-FA and friends
-system(['dtifit -k ' ddir dfile '.nii.gz -m ' ddir ngfile ...
+bash(['dtifit -k ' ddir dfile '.nii.gz -m ' ddir ngfile ...
   ' -r ' ddir bvec ' -b ' ddir bval ...
   ' -o ' fadir file]);
 %-------%
 
 %-------%
 %- create radial diffusivity
-system(['fslmaths ' fadir file '_L2 -add ' fadir file '_L3 -div 2 ' fadir file '_RD']);
+bash(['fslmaths ' fadir file '_L2 -add ' fadir file '_L3 -div 2 ' fadir file '_RD']);
 %-------%
 %---------------------------%
 
@@ -76,7 +76,7 @@ if ~isempty(cfg.dtifa.tbss)
     if strcmp(cfg.dtifa.type{i}, 'FA')
       %-------%
       %-copy FA
-      system(['ln ' fadir file '_' cfg.dtifa.type{i} '.nii.gz ' cfg.dtifa.tbss]);
+      bash(['ln ' fadir file '_' cfg.dtifa.type{i} '.nii.gz ' cfg.dtifa.tbss]);
       %-------%
       
     else
@@ -85,7 +85,7 @@ if ~isempty(cfg.dtifa.tbss)
       tbssdir = [cfg.dtifa.tbss cfg.dtifa.type{i} filesep];
       if ~isdir(tbssdir); mkdir(tbssdir); end
       
-      system(['ln ' fadir file '_' cfg.dtifa.type{i} '.nii.gz ' tbssdir file '_FA.nii.gz']); % it has to be called FA
+      bash(['ln ' fadir file '_' cfg.dtifa.type{i} '.nii.gz ' tbssdir file '_FA.nii.gz']); % it has to be called FA
       %-------%
       
     end

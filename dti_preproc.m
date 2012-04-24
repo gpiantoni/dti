@@ -47,17 +47,17 @@ mgfile = sprintf('%s_%04.f_%s_magn.nii.gz', cfg.rec, subj, cfg.dti.mod);
 %-prepare DTI data
 %-----------------%
 %-get b0 image
-system(['fslroi ' ddir dfile ' ' ddir ngfile ' ' num2str(cfg.dti.b0) ' 1']);
+bash(['fslroi ' ddir dfile ' ' ddir ngfile ' ' num2str(cfg.dti.b0) ' 1']);
 %-----------------%
 
 %-----------------%
 %-make mask
-system(['bet ' ddir ngfile ' ' ddir ngfile ' -m -f .3']); % change -f, (no -n because of fugue)
+bash(['bet ' ddir ngfile ' ' ddir ngfile ' -m -f .3']); % change -f, (no -n because of fugue)
 %-----------------%
 
 %-----------------%
 %-eddy current correction
-system(['eddy_correct ' ddir dfile ' ' ddir ecfile ' ' num2str(cfg.dti.b0)]);
+bash(['eddy_correct ' ddir dfile ' ' ddir ecfile ' ' num2str(cfg.dti.b0)]);
 %-----------------%
 %---------------------------%
 

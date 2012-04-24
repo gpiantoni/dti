@@ -135,7 +135,7 @@ for m = 1:numel(cfg.atlas.mask)
     ft_sourcewrite(cfg1, mri);
     
     gzip([cfg.atlas.dir maskname '.nii'])
-    delete([[cfg.atlas.dir maskname '.nii']])
+    delete([cfg.atlas.dir maskname '.nii'])
     %------------------%
     
   end

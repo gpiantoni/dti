@@ -47,20 +47,20 @@ cd(cfg.dtifa.tbss)
 
 %-------%
 %-TBSS preproc
-system(['tbss_1_preproc ' sprintf('%s ', allfa(:).name) ]);
+bash(['tbss_1_preproc ' sprintf('%s ', allfa(:).name) ]);
 % copy images from slicedir?
 %-------%
 
 %-------%
 %-TBSS registation
-system('tbss_2_reg -T');
+bash('tbss_2_reg -T');
 
 while 1
   pause(5)
   
   %-method 1: check if flirt and fnirt are running
   %it fails bc it takes some time to initialize
-  [~, running] = system('ps -u gpiantoni | grep -c f*irt');
+  [running] = bash('ps -u gpiantoni | grep -c f*irt');
   fprintf(running)
   
   %-method 2: tbss2 creates some empty files and it puts something in it at
@@ -77,12 +77,12 @@ disp('done')
 
 %-------%
 %-TBSS postreg
-system('tbss_3_postreg -S');
+bash('tbss_3_postreg -S');
 %-------%
 
 %-------%
 %-TBSS prestats
-system(['tbss_4_prestats ' num2str(cfg.tbss.thr)]);
+bash(['tbss_4_prestats ' num2str(cfg.tbss.thr)]);
 %-------%
 
 %-------%
@@ -90,7 +90,7 @@ system(['tbss_4_prestats ' num2str(cfg.tbss.thr)]);
 for i = 1:numel(cfg.dtifa.type)
   if ~strcmp(cfg.dtifa.type{i}, 'FA')
     disp(['computing ' cfg.dtifa.type{i} ])
-    system(['tbss_non_FA ' cfg.dtifa.type{i}]);
+    bash(['tbss_non_FA ' cfg.dtifa.type{i}]);
   end
 end
 %-------%

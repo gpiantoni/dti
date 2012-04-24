@@ -67,7 +67,7 @@ for i = 1:numel(masktype)
     maskfile = cfg.track.(masktype{i});
     [~, maskname, ext] = fileparts(maskfile);
     maskname = [maskname ext];
-    system(['flirt -in ' maskfile ' -ref ' ddir ngfile ' -applyxfm -init ' bedpostxdir 'xfms/standard2diff.mat -o ' tractdir maskname]);
+    bash(['flirt -in ' maskfile ' -ref ' ddir ngfile ' -applyxfm -init ' bedpostxdir 'xfms/standard2diff.mat -o ' tractdir maskname]);
     opt.(optname{i}) = [tractdir maskname];
   end
   
@@ -95,13 +95,14 @@ command = [command ' --forcedir --dir=' tractdir];
 
 %-------%
 %-other options (TODO: use defaults and cfg.track.opt)
-command = [command ' -l -c 0.2 -S 2000 --steplength=0.5 -P 5000 --opd'];
+command = [command ' -l -c 0.2 -S 2000 --steplength=0.5 -P 1000 --opd'];
+% command = [command ' -l -c 0.2 -S 2000 --steplength=0.5 -P 5000 --opd'];
 %-------%
 %---------------------------%
 
 %---------------------------%
 %-call to probtrackx
-system(command);
+output = bash(command);
 %output/feedback on analysis
 %---------------------------%
 

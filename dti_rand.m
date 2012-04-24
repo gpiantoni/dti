@@ -97,7 +97,7 @@ for d = 1:numel(des)
       
       opt.i = [cfg.dtifa.tbss 'stats/all_' cfg.dtifa.type{i} '.nii.gz'];
       opt.o = [randd desname '_' cfg.dtifa.type{i}];
-      system(['randomise_parallel -i ' opt.i ' -o "' opt.o '" -d "' opt.d '" -t "' opt.t '" -m ' opt.m ' ' cfg.dtirand]);
+      bash(['randomise_parallel -i ' opt.i ' -o "' opt.o '" -d "' opt.d '" -t "' opt.t '" -m ' opt.m ' ' cfg.dtirand]);
       
     end
   end
@@ -110,14 +110,14 @@ end
 
 %-----------------%
 %-check whether the program has finished
-[~, username] = system('whoami');
+[username] = bash('whoami');
 username(end) = [];
 while 1
   pause(15)
   
   %-method 1: check if randomise running
   %it fails bc it takes some time to initialize
-  [~, running] = system(['ps -u ' username ' | grep -c randomise']);
+  [running] = bash(['ps -u ' username ' | grep -c randomise']);
   fprintf([datestr(now, 'HH:MM:SS') '  ' running])
   
   %-method 2:
