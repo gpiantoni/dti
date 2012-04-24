@@ -27,7 +27,7 @@ function dti_bedpostx(cfg, subj)
 %
 % Part of DTI
 % see also DTI_CONVERT, DTI_PREPROC, DTI_FA, DTI_BEDPOSTX
-%          DTI_TBSS, DTI_DESIGN, DTI_RAND
+%          DTI_TBSS, DTI_DESIGN, DTI_RAND, ATLAS_MASK
 
 %---------------------------%
 %-start log
