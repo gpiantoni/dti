@@ -26,7 +26,7 @@ function dti_bedpostx(cfg, subj)
 %  - affine for linear registration to cfg.dti.ref
 %
 % Part of DTI
-% see also DTI_CONVERT, DTI_PREPROC, DTI_FA, DTI_BEDPOSTX
+% see also DTI_CONVERT, DTI_PREPROC, DTI_FA, DTI_BEDPOSTX, DTI_PROBTRACKX
 %          DTI_TBSS, DTI_DESIGN, DTI_RAND, ATLAS_MASK
 
 %---------------------------%
@@ -39,7 +39,7 @@ tic_t = tic;
 %---------------------------%
 %-dir and files
 ddir = sprintf('%s%04.f/%s/%s/', cfg.data, subj, cfg.dti.mod, cfg.dti.cond); % data directory
-beddir = [ddir 'bed/']; % FA directory
+beddir = [ddir 'bed/']; % starting directory
 bedpostxdir = [beddir(1:end-1) '.bedpostX/'];
 
 if isdir(beddir); rmdir(beddir, 's'); end

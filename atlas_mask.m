@@ -15,7 +15,9 @@ function atlas_mask(cfg)
 %  string, or a cell with multiple string, they need to match the name
 %  inside the atlas file you chose).
 %
-%  .atlas.dir: directory to put the mask in.
+%  .atlas.dir: directory to put the mask in
+%
+%  .dti.ref: template for flirt realignment ('/usr/share/data/fsl-mni152-templates/MNI152_T1_1mm_brain.nii.gz')
 %
 % INPUT
 %  SPM8 with WFU atlas in toolbox
@@ -24,7 +26,7 @@ function atlas_mask(cfg)
 %  mask with name atlas_area in folder .atlas.dir
 %
 % Part of DTI
-% see also DTI_CONVERT, DTI_PREPROC, DTI_FA, DTI_BEDPOSTX
+% see also DTI_CONVERT, DTI_PREPROC, DTI_FA, DTI_BEDPOSTX, DTI_PROBTRACKX
 %          DTI_TBSS, DTI_DESIGN, DTI_RAND, ATLAS_MASK
 
 %---------------------------%
@@ -74,7 +76,7 @@ for m = 1:numel(cfg.atlas.mask)
   
   %----------------------------%
   %-check if mask exist
-  if exist([cfg.atlas.dir maskname '.nii'], 'file')
+  if exist([cfg.atlas.dir maskname '.nii.gz'], 'file')
     
     %-------%
     %-output
@@ -117,16 +119,27 @@ for m = 1:numel(cfg.atlas.mask)
     %------------------%
     
     %------------------%
+    %-convert into dti ref space
+    refmri = ft_read_mri(cfg.dti.ref);
+    
+    cfg1 = [];
+    cfg1.parameter = 'anatomy';
+    mri = ft_sourceinterpolate(cfg1, mri, refmri); % MRI2 XXXX
+    %------------------%
+    
+    %------------------%
     %-write to file
     cfg1 = [];
     cfg1.parameter = 'anatomy';
     cfg1.filename = [cfg.atlas.dir maskname '.nii'];
     ft_sourcewrite(cfg1, mri);
+    
+    gzip([cfg.atlas.dir maskname '.nii'])
+    delete([[cfg.atlas.dir maskname '.nii']])
     %------------------%
     
   end
   %----------------------------%
-  
   
 end
 %-------------------------------------%

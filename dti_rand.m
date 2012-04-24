@@ -25,7 +25,7 @@ function dti_rand(cfg)
 %  cfg.dtifa.tbss has stats analyzed
 %
 % Part of DTI
-% see also DTI_CONVERT, DTI_PREPROC, DTI_FA, DTI_BEDPOSTX
+% see also DTI_CONVERT, DTI_PREPROC, DTI_FA, DTI_BEDPOSTX, DTI_PROBTRACKX
 %          DTI_TBSS, DTI_DESIGN, DTI_RAND, ATLAS_MASK
 
 %---------------------------%
