@@ -68,7 +68,7 @@ bash(['bedpostx ' beddir]);
 
 %-----------------%
 %-check whether the program has finished
-[~, nslices] = bash(['cat ' bedpostxdir 'commands.txt | wc -l']);
+[nslices] = bash(['cat ' bedpostxdir 'commands.txt | wc -l']);
 nslices = eval(nslices);
 
 while 1
@@ -76,7 +76,7 @@ while 1
   
   %-------%
   %-number of slices which are done
-  [~, done] = bash(['ls ' bedpostxdir 'diff_slices/data_slice_00*/dyads1.nii.gz -l | wc -l']);
+  [done] = bash(['ls ' bedpostxdir 'diff_slices/data_slice_00*/dyads1.nii.gz -l | wc -l']);
   if numel(done) > 100 % something like: 'ls: cannot access etc'
     done = 0;
   else
