@@ -12,6 +12,10 @@ function dti_probtrackx(cfg, subj)
 %  .track.waypoint: waypoint mask, full filename (string, optional)
 %  .track.exclusion: exclusion mask, full filename (string, optional)
 %  .track.termination: waypoint mask, full filename (string, optional)
+%  .track.maskthr: masks are converted to diffusion space. Due to
+%                  upsampling, there are voxels with low value. We make
+%                  binary images above the threshold 
+%
 %  .track.opt: extra options to pass to probtrackx
 % 
 % INPUT
@@ -32,7 +36,12 @@ output = sprintf('(p%02.f) %s started at %s on %s\n', ...
 tic_t = tic;
 %---------------------------%
 
+%---------------------------%
+%-check input 
+if ~isfield(cfg, 'track'); cfg.mask = []; end
+if ~isfield(cfg.track, 'maskthr'); cfg.track.maskthr = 1; end
 opt = [];
+%---------------------------%
 
 %---------------------------%
 %-prepare directories
@@ -64,11 +73,30 @@ optname = {'seed' 'waypoints' 'avoid' 'stop'};
 for i = 1:numel(masktype)
 
   if isfield(cfg.track, masktype{i})
+    
+    %-----------------%
+    %-specify the mask
     maskfile = cfg.track.(masktype{i});
     [~, maskname, ext] = fileparts(maskfile);
     maskname = [maskname ext];
-    bash(['flirt -in ' maskfile ' -ref ' ddir ngfile ' -applyxfm -init ' bedpostxdir 'xfms/standard2diff.mat -o ' tractdir maskname]);
     opt.(optname{i}) = [tractdir maskname];
+    %-----------------%
+    
+    %-----------------%
+    %-mask into diffusion space
+    bash(['flirt -in ' maskfile ' -ref ' ddir ngfile ' -applyxfm -init ' bedpostxdir 'xfms/standard2diff.mat -o ' tractdir maskname]);
+    %-----------------%
+    
+    %-----------------%
+    %-binary image and its size
+    bash(['fslmaths ' tractdir maskname ' -thr ' num2str(cfg.track.maskthr) ' -bin ' tractdir maskname]);
+    [masksize] = bash(['fslstats ' tractdir maskname ' -V']);
+    masksize = textscan(masksize, '%s %s'); % this is the output of fslstats, size in voxels and size in volume
+
+    output = sprintf('%s%s mask (%s) has %s voxels\n', ...
+      output, masktype{i}, maskname, masksize{1}{1});
+    %-----------------%    
+    
   end
   
 end
@@ -95,14 +123,13 @@ command = [command ' --forcedir --dir=' tractdir];
 
 %-------%
 %-other options (TODO: use defaults and cfg.track.opt)
-command = [command ' -l -c 0.2 -S 2000 --steplength=0.5 -P 1000 --opd'];
-% command = [command ' -l -c 0.2 -S 2000 --steplength=0.5 -P 5000 --opd'];
+command = [command ' -l -c 0.2 -S 2000 --steplength=0.5 -P 5000 --opd'];
 %-------%
 %---------------------------%
 
 %---------------------------%
 %-call to probtrackx
-output = bash(command);
+bash(command);
 %output/feedback on analysis
 %---------------------------%
 
