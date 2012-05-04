@@ -26,7 +26,8 @@ function dti_bedpostx(cfg, subj)
 %  - affine for linear registration to cfg.dti.ref
 %
 % Part of DTI
-% see also DTI_CONVERT, DTI_PREPROC, DTI_FA, DTI_BEDPOSTX, DTI_PROBTRACKX
+% see also DTI_CONVERT, DTI_PREPROC, DTI_FA,
+%          DTI_BEDPOSTX, DTI_PROBTRACKX, DTI_TRACKPROPERTIES
 %          DTI_TBSS, DTI_DESIGN, DTI_RAND, ATLAS_MASK
 
 %---------------------------%
